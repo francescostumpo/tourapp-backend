@@ -1,9 +1,0 @@
-org/nish/kairos/tourapp/controllers/TestController.class
-org/nish/kairos/tourapp/model/TicketTipology.class
-org/nish/kairos/tourapp/model/TicketVirtual.class
-org/nish/kairos/tourapp/probes/HealthProbe.class
-org/nish/kairos/tourapp/model/TicketStandard.class
-org/nish/kairos/tourapp/model/Booking.class
-org/nish/kairos/tourapp/model/Site.class
-org/nish/kairos/tourapp/model/Response.class
-org/nish/kairos/tourapp/utils/CloudantConverter.class

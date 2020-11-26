@@ -1,6 +1,6 @@
 # tourapp project
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
+This project uses Quarkus, the Supersonic Subatomic Java Framework. The Java version used for the current project is "Oracle Java SDK 11".
 
 If you want to learn more about Quarkus, please visit its website: https://quarkus.io/ .
 
