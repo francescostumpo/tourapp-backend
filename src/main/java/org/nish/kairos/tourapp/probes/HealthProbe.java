@@ -39,10 +39,4 @@ public class HealthProbe {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @GetMapping("/getTestDoc")
-    public ResponseEntity<Object> getTestDoc(@RequestHeader("Authorization") String authorization) throws JsonProcessingException {
-
-        return new ResponseEntity<>(DbManager.getCloudantDoc("test", "561d99d38f6477c3b7d04560c7b48127", "Test"), HttpStatus.OK);
-
-    }
 }

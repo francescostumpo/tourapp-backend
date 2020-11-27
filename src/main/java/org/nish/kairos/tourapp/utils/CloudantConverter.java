@@ -3,8 +3,12 @@ package org.nish.kairos.tourapp.utils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import org.nish.kairos.tourapp.model.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class CloudantConverter {
 
@@ -37,6 +41,12 @@ public class CloudantConverter {
         }
     }
 
+    public static List<Object> convertToEntityList(String entityName, String documentList){
+        JsonObject jsonObject = new Gson().fromJson(documentList, JsonObject.class);
+
+        return null;
+    }
+
     public static JsonObject convertToJson(Object object) throws JsonProcessingException {
 
         ObjectMapper objectMapper = new ObjectMapper();
@@ -50,5 +60,23 @@ public class CloudantConverter {
             throw e;
         }
         return entityJson;
+    }
+
+    public static JsonObject convertToJsonFromString(String object) throws JsonProcessingException {
+
+        JsonObject entityJson = new Gson().fromJson(object, JsonObject.class);
+
+        return entityJson;
+    }
+
+    public static List<Object> convertDocumentStringListToJSONList(String entitiesListString){
+        JsonArray entitiesListJO = new Gson().fromJson(entitiesListString, JsonArray.class);
+        List<Object> objectList = new ArrayList<>();
+        for(int i=0; i< entitiesListJO.size(); i++){
+            JsonObject jo = (JsonObject) entitiesListJO.get(i).getAsJsonObject().get("doc");
+            Object object = new Gson().fromJson(jo, Object.class);
+            objectList.add(object);
+        }
+        return objectList;
     }
 }

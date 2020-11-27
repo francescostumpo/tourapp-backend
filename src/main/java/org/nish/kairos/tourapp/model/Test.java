@@ -1,9 +1,7 @@
 package org.nish.kairos.tourapp.model;
 
 
-import com.fasterxml.jackson.databind.util.JSONPObject;
-
-public class Test {
+public class Test{
 
     private String _id;
     private String _rev;
