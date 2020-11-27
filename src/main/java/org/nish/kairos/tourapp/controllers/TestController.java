@@ -38,7 +38,7 @@ public class TestController {
         if(!TokenValidator.validate(authorization)) return new ResponseEntity<>(TokenValidator.generateUnauthResponse(response), HttpStatus.UNAUTHORIZED);
 
         try{
-            DbManager.insertCloudantDoc("test", test);
+            DbManager.createOrUpdateCloudantDoc("test", test);
             response.setStatus(200);
             response.setMessage("Document correctly inserted on cloudant DB.");
             return new ResponseEntity<>(response, HttpStatus.OK);

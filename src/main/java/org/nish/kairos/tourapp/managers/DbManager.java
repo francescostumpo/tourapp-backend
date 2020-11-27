@@ -5,6 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.ibm.cloud.cloudant.v1.Cloudant;
 import com.ibm.cloud.cloudant.v1.model.*;
+import org.nish.kairos.tourapp.model.Booking;
 import org.nish.kairos.tourapp.model.Test;
 import org.nish.kairos.tourapp.utils.CloudantConverter;
 import org.slf4j.Logger;
@@ -19,10 +20,19 @@ public class DbManager {
     private static final Logger logger = LoggerFactory.getLogger(DbManager.class);
 
     private static void initializeCloudantConnection(){
-        if(cloudant == null){
+        if(cloudant == null ){
             logger.info("Initializing new connection to cloudant DB: " + System.getenv("TOURAPPDB_INSTANCENAME"));
             cloudant = Cloudant.newInstance(System.getenv("TOURAPPDB_INSTANCENAME"));
             return;
+        }else{
+            try{
+                // Checking connection to cloudant is active
+                cloudant.getServerInformation();
+            }catch(Exception e){
+                cloudant = null;
+                initializeCloudantConnection();
+            }
+
         }
         logger.info("Connection to cloudant DB: " + System.getenv("TOURAPPDB_INSTANCENAME") + " already initalized. Re-using it.");
     }
@@ -33,18 +43,22 @@ public class DbManager {
         return serverInformation.getVersion();
     }
 
-    public static Object getCloudantDoc(String database, String id, String entityName) throws JsonProcessingException {
+    public static Object getCloudantDoc(String database, String id, String entityName) {
         initializeCloudantConnection();
-
         GetDocumentOptions getDocumentOptions = new GetDocumentOptions.Builder().db(database).docId(id).build();
-        Document test = cloudant
-                .getDocument(getDocumentOptions)
-                .execute()
-                .getResult();
+        Document document = null;
+        try{
+            document = cloudant
+                    .getDocument(getDocumentOptions)
+                    .execute()
+                    .getResult();
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
 
-        Object testObject = CloudantConverter.convertToEntity(entityName, test.toString());
-
-        return testObject;
+        if(document == null) return null;
+        return CloudantConverter.convertToEntity(entityName, document.toString());
     }
 
     public static List<Object> getAllCloudantDocs(String database) {
@@ -52,32 +66,62 @@ public class DbManager {
         PostAllDocsOptions postAllDocsOptions = new PostAllDocsOptions.Builder().db(database).includeDocs(true).build();
         AllDocsResult documentList = cloudant.postAllDocs(postAllDocsOptions).execute().getResult();
 
-        List<Object> documentListJO= null;
-        documentListJO = CloudantConverter.convertDocumentStringListToJSONList(documentList.getRows().toString());
-
-        return documentListJO;
-
-
+        return CloudantConverter.convertDocumentStringListToObjectList(documentList.getRows().toString());
     }
 
-    public static void insertCloudantDoc(String database, Object object) throws JsonProcessingException {
+    public static boolean createOrUpdateCloudantDoc(String database, Object object)  {
         initializeCloudantConnection();
-        JsonObject jsonEntity = CloudantConverter.convertToJson(object);
-        Document document = createLocalDocumentHelper(jsonEntity);
+        Boolean createdOrUpdated = false;
+        JsonObject jsonEntity = null;
+        try {
+            jsonEntity = CloudantConverter.convertToJson(object);
+            Document document = createLocalDocumentHelper(jsonEntity);
 
-        PostDocumentOptions createDocumentOptions =
-                new PostDocumentOptions.Builder()
-                        .db(database)
-                        .document(document)
-                        .build();
-        DocumentResult createDocumentResponse = cloudant
-                .postDocument(createDocumentOptions)
-                .execute()
-                .getResult();
+            PostDocumentOptions createDocumentOptions =
+                    new PostDocumentOptions.Builder()
+                            .db(database)
+                            .document(document)
+                            .build();
+            DocumentResult createDocumentResponse = cloudant
+                    .postDocument(createDocumentOptions)
+                    .execute()
+                    .getResult();
 
-        document.setRev(createDocumentResponse.getRev());
+            document.setRev(createDocumentResponse.getRev());
+            createdOrUpdated = true;
+        } catch (Exception e) {
+            logger.error("Exception: " + e.getMessage());
+            e.printStackTrace();
+        }
 
+        return createdOrUpdated;
     }
+
+    public static boolean deleteCloudantDoc(String database, String _id, String _rev){
+        initializeCloudantConnection();
+        Boolean deleted = false;
+        try {
+            DeleteDocumentOptions deleteDocumentOptions =
+                    new DeleteDocumentOptions.Builder()
+                            .db(database)
+                            .rev(_rev)
+                            .docId(_id)
+                            .build();
+            DocumentResult deleteDocumentResponse = cloudant
+                    .deleteDocument(deleteDocumentOptions)
+                    .execute()
+                    .getResult();
+
+            if (deleteDocumentResponse.isOk()) {
+                deleted = true;
+            }
+        } catch (Exception e) {
+            logger.error("Exception: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return deleted;
+    }
+
 
 
     public static Document createLocalDocumentHelper(JsonObject jsonObject){

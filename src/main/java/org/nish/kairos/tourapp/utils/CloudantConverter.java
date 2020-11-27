@@ -41,11 +41,6 @@ public class CloudantConverter {
         }
     }
 
-    public static List<Object> convertToEntityList(String entityName, String documentList){
-        JsonObject jsonObject = new Gson().fromJson(documentList, JsonObject.class);
-
-        return null;
-    }
 
     public static JsonObject convertToJson(Object object) throws JsonProcessingException {
 
@@ -62,14 +57,8 @@ public class CloudantConverter {
         return entityJson;
     }
 
-    public static JsonObject convertToJsonFromString(String object) throws JsonProcessingException {
 
-        JsonObject entityJson = new Gson().fromJson(object, JsonObject.class);
-
-        return entityJson;
-    }
-
-    public static List<Object> convertDocumentStringListToJSONList(String entitiesListString){
+    public static List<Object> convertDocumentStringListToObjectList(String entitiesListString){
         JsonArray entitiesListJO = new Gson().fromJson(entitiesListString, JsonArray.class);
         List<Object> objectList = new ArrayList<>();
         for(int i=0; i< entitiesListJO.size(); i++){

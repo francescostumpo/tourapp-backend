@@ -12,7 +12,8 @@ public class TicketStandard {
     private List<Site> siti;
     private TourOperator tourOperator;
     private int nIngressi;
-    private Date dataEmissione;
+    private String nazione;
+    private String dataEmissione;
     private double totaleEuro;
 
     public String get_id() {
@@ -71,11 +72,19 @@ public class TicketStandard {
         this.nIngressi = nIngressi;
     }
 
-    public Date getDataEmissione() {
+    public String getNazione() {
+        return nazione;
+    }
+
+    public void setNazione(String nazione) {
+        this.nazione = nazione;
+    }
+
+    public String getDataEmissione() {
         return dataEmissione;
     }
 
-    public void setDataEmissione(Date dataEmissione) {
+    public void setDataEmissione(String dataEmissione) {
         this.dataEmissione = dataEmissione;
     }
 
@@ -97,6 +106,7 @@ public class TicketStandard {
                 ", siti=" + siti +
                 ", tourOperator=" + tourOperator +
                 ", nIngressi=" + nIngressi +
+                ", nazione='" + nazione + '\'' +
                 ", dataEmissione=" + dataEmissione +
                 ", totaleEuro=" + totaleEuro +
                 '}';

@@ -12,9 +12,9 @@ public class TokenValidator {
         if(authorization == null){
             return false;
         }else{
-            logger.info("Authorization: " + authorization);
+            logger.debug("Authorization: " + authorization);
             String[] splitAuth = authorization.split(" ");
-            logger.info(splitAuth[1]);
+            logger.debug(splitAuth[1]);
             //TO-DO Implement logic to validate token
             return true;
         }

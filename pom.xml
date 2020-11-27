@@ -4,7 +4,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.nish.kairos</groupId>
-    <artifactId>tourapp</artifactId>
+    <artifactId>tourapp-backend</artifactId>
     <version>1.0.0</version>
     <properties>
         <surefire-plugin.version>2.22.1</surefire-plugin.version>
@@ -54,6 +54,17 @@
             <groupId>com.ibm.cloud</groupId>
             <artifactId>cloudant</artifactId>
             <version>0.0.18</version>
+        </dependency>
+        <!-- QR Depnendencies -->
+        <dependency>
+            <groupId>com.google.zxing</groupId>
+            <artifactId>core</artifactId>
+            <version>3.3.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.zxing</groupId>
+            <artifactId>javase</artifactId>
+            <version>3.3.0</version>
         </dependency>
     </dependencies>
     <build>

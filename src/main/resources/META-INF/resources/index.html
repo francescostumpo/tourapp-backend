@@ -1,0 +1,64 @@
+<html>
+
+<body>
+<h1>Index.html</h1>
+
+
+<button onClick="print()">Print</button>
+<button onclick="printMultiple()">PrintMultiple</button>
+</body>
+
+<script>
+
+	function reqListener () {
+	  console.log(this.responseText);
+	}
+
+
+	function print(){
+		var oReq = new XMLHttpRequest();
+		
+		oReq.onload = function(e) {
+		  console.log(this.response)
+		  var file = new Blob([this.response], {type: 'image/png'});
+		  	var url = window.URL || window.webkitURL;
+	        var element = document.createElement('a');
+	        element.setAttribute('href', url.createObjectURL(file));
+	        element.setAttribute('download', "tickets.png");
+	
+	        element.style.display = 'none';
+	        document.body.appendChild(element);
+	        element.click();
+	        document.body.removeChild(element);
+		}
+		
+		oReq.responseType = "arraybuffer";
+		oReq.open("GET", "http://localhost:8080/generateTicket/getQRCode");
+		oReq.send();
+	
+	}
+
+    function printMultiple(){
+        var oReq = new XMLHttpRequest();
+
+        oReq.onload = function(e) {
+            console.log(this.response)
+            var file = new Blob([this.response], {type: 'image/png'});
+            var url = window.URL || window.webkitURL;
+            var element = document.createElement('a');
+            element.setAttribute('href', url.createObjectURL(file));
+            element.setAttribute('download', "tickets.png");
+
+            element.style.display = 'none';
+            document.body.appendChild(element);
+            element.click();
+            document.body.removeChild(element);
+        }
+
+        oReq.responseType = "arraybuffer";
+        oReq.open("GET", "http://localhost:8080/generateMultipleTickets");
+        oReq.send();
+
+    }
+</script>
+</html>

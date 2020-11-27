@@ -1,9 +1,9 @@
 package org.nish.kairos.tourapp.controllers;
 
-import org.nish.kairos.tourapp.managers.DbManager;
+
 import org.nish.kairos.tourapp.model.Response;
-import org.nish.kairos.tourapp.model.TourOperator;
-import org.nish.kairos.tourapp.services.TourOperatorService;
+import org.nish.kairos.tourapp.model.TicketTipology;
+import org.nish.kairos.tourapp.services.TicketTipologyService;
 import org.nish.kairos.tourapp.utils.TokenValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,30 +14,29 @@ import org.springframework.web.bind.annotation.*;
 import javax.inject.Inject;
 import java.util.List;
 
-
 @RestController
-@RequestMapping("/api/to")
-public class TourOperatorController {
+@RequestMapping("/api/tt")
+public class TicketTipologyController {
+
+    private static final Logger logger = LoggerFactory.getLogger(TicketTipologyController.class);
 
     @Inject
-    TourOperatorService tourOperatorService;
+    TicketTipologyService ticketTipologyService;
 
-    private static final Logger logger = LoggerFactory.getLogger(TourOperatorController.class);
-
-    @PostMapping("/createOrUpdateTourOperator")
-    public ResponseEntity<Response> createOrUpdateTourOperator(@RequestHeader("Authorization") String authorization, @RequestBody TourOperator tourOperator){
+    @PostMapping("/createOrUpdateTicketTipology")
+    public ResponseEntity<Response> createOrUpdateTicketTipology(@RequestHeader("Authorization") String authorization, @RequestBody TicketTipology ticketTipology){
 
         Response response = new Response();
 
         if(!TokenValidator.validate(authorization)) return new ResponseEntity<>(TokenValidator.generateUnauthResponse(response), HttpStatus.UNAUTHORIZED);
 
         try{
-            if(tourOperatorService.createOrUpdateTourOperator(tourOperator)){
+            if(ticketTipologyService.createOrUpdateTicketTipology(ticketTipology)){
                 response.setStatus(200);
-                if(tourOperator.get_id() == null){
-                    response.setMessage("TourOperator correctly created on cloudant DB.");
+                if(ticketTipology.get_id() == null){
+                    response.setMessage("TicketTipology correctly created on cloudant DB.");
                 }else{
-                    response.setMessage("TourOperator correctly updated on cloudant DB.");
+                    response.setMessage("TicketTipology correctly updated on cloudant DB.");
                 }
                 return new ResponseEntity<>(response, HttpStatus.OK);
             }else{
@@ -54,17 +53,17 @@ public class TourOperatorController {
         }
     }
 
-    @GetMapping("/getTourOperator/{tourOperatorId}")
-    public ResponseEntity<Object> createTourOperator(@RequestHeader("Authorization") String authorization, @PathVariable String tourOperatorId){
+    @GetMapping("/getTicketTipology/{ticketTipologyId}")
+    public ResponseEntity<Object> createTourOperator(@RequestHeader("Authorization") String authorization, @PathVariable String ticketTipologyId){
 
         Response response = new Response();
 
         if(!TokenValidator.validate(authorization)) return new ResponseEntity<>(TokenValidator.generateUnauthResponse(response), HttpStatus.UNAUTHORIZED);
 
         try{
-            TourOperator tourOperator = tourOperatorService.getTourOperator(tourOperatorId);
-            if(tourOperator != null){
-                return new ResponseEntity<>(tourOperator, HttpStatus.OK);
+            TicketTipology ticketTipology = ticketTipologyService.getTicketTipology(ticketTipologyId);
+            if(ticketTipology != null){
+                return new ResponseEntity<>(ticketTipology, HttpStatus.OK);
             }
             response.setStatus(503);
             response.setMessage("The service is unavailable. Please verify logs for more details");
@@ -78,16 +77,16 @@ public class TourOperatorController {
         }
     }
 
-    @GetMapping("/getAllTourOperators")
-    public ResponseEntity<Object> getAllTourOperators(@RequestHeader("Authorization") String authorization){
+    @GetMapping("/getAllTicketTipologies")
+    public ResponseEntity<Object> getAllTicketTipologies(@RequestHeader("Authorization") String authorization){
 
         Response response = new Response();
 
         if(!TokenValidator.validate(authorization)) return new ResponseEntity<>(TokenValidator.generateUnauthResponse(response), HttpStatus.UNAUTHORIZED);
 
         try{
-            List<TourOperator> tourOperatorList = tourOperatorService.getAllTourOperators();
-            return new ResponseEntity<>(tourOperatorList, HttpStatus.OK);
+            List<TicketTipology> ticketTipologyList = ticketTipologyService.getAllTicketTipologies();
+            return new ResponseEntity<>(ticketTipologyList, HttpStatus.OK);
 
         }catch (Exception e){
             logger.error("Exception: " + e.getMessage());
@@ -98,17 +97,17 @@ public class TourOperatorController {
         }
     }
 
-    @DeleteMapping("/deleteTourOperator")
-    public ResponseEntity<Object> deleteTourOperator(@RequestHeader("Authorization") String authorization, @RequestBody TourOperator tourOperator){
+    @DeleteMapping("/deleteTicketTipology")
+    public ResponseEntity<Object> deleteTicketTipology(@RequestHeader("Authorization") String authorization, @RequestBody TicketTipology ticketTipology){
 
         Response response = new Response();
 
         if(!TokenValidator.validate(authorization)) return new ResponseEntity<>(TokenValidator.generateUnauthResponse(response), HttpStatus.UNAUTHORIZED);
 
         try{
-            if(tourOperatorService.deleteTourOperator(tourOperator)){
+            if(ticketTipologyService.deleteTicketTipology(ticketTipology)){
                 response.setStatus(200);
-                response.setMessage("TourOperator correctly deleted from cloudant DB.");
+                response.setMessage("TicketTipology correctly deleted from cloudant DB.");
                 return new ResponseEntity<>(response, HttpStatus.OK);
             }else{
                 response.setStatus(503);
@@ -123,6 +122,4 @@ public class TourOperatorController {
             return new ResponseEntity<>(response , HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
-
 }
