@@ -93,7 +93,7 @@ public class TourOperatorController {
             logger.error("Exception: " + e.getMessage());
             e.printStackTrace();
             response.setStatus(500);
-            response.setMessage("An internal error occurred: "+ e.getMessage() + ".\nPlease verify logs for more details");
+            response.setMessage("An internal error occurred: "+ e.getMessage() + ". Please verify logs for more details");
             return new ResponseEntity<>(response , HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

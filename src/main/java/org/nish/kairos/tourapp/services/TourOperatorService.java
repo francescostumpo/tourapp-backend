@@ -3,6 +3,7 @@ package org.nish.kairos.tourapp.services;
 import org.nish.kairos.tourapp.controllers.TourOperatorController;
 import org.nish.kairos.tourapp.managers.DbManager;
 import org.nish.kairos.tourapp.model.TourOperator;
+import org.nish.kairos.tourapp.utils.Converter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -35,7 +36,7 @@ public class TourOperatorService {
     }
 
     public List<TourOperator> getAllTourOperators(){
-        List<TourOperator> tourOperatorList = (List<TourOperator>) (Object) DbManager.getAllCloudantDocs(DB_NAME);
+        List<TourOperator> tourOperatorList = (List<TourOperator>) DbManager.getAllCloudantDocs(DB_NAME, ENTITY_NAME);
         return tourOperatorList;
     }
 

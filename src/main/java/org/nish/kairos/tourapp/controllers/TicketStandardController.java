@@ -59,8 +59,10 @@ public class TicketStandardController {
 
     @GetMapping("/verifyTicket/{ticketNo}")
     public ResponseEntity<Object> verifyTicket(@RequestHeader("Authorization") String authorization, @PathVariable String ticketNo){
-
         Response response = new Response();
+
+        if(!TokenValidator.validate(authorization)) return new ResponseEntity<>(TokenValidator.generateUnauthResponse(response), HttpStatus.UNAUTHORIZED);
+
         try{
             TicketStandard ticketStandard = ticketStandardService.getTicketStandard(ticketNo);
             if(ticketStandard != null){
@@ -81,7 +83,6 @@ public class TicketStandardController {
     public ResponseEntity<Object> validateTicket(@RequestHeader("Authorization") String authorization, @PathVariable String ticketNo){
         Response response = new Response();
 
-        logger.info(authorization);
         if(!TokenValidator.validate(authorization) && !authorization.equals(System.getenv("VERIFICATION_CODE"))) return new ResponseEntity<>(TokenValidator.generateUnauthResponse(response), HttpStatus.UNAUTHORIZED);
 
         try{
@@ -98,8 +99,28 @@ public class TicketStandardController {
         }
     }
 
+    @GetMapping("/getAllTicketsStandard")
+    public ResponseEntity<Object> getAllTicketsStandard(@RequestHeader("Authorization") String authorization){
+        Response response = new Response();
+
+        if(!TokenValidator.validate(authorization)) return new ResponseEntity<>(TokenValidator.generateUnauthResponse(response), HttpStatus.UNAUTHORIZED);
+        try{
+            List<TicketStandard> ticketStandardList = ticketStandardService.getAllTicketsStandard();
+            if(ticketStandardList != null){
+                return new ResponseEntity<>(ticketStandardList, HttpStatus.OK);
+            }
+            return new ResponseEntity<>(new JsonArray(), HttpStatus.OK);
+        }catch (Exception e){
+            logger.error("Exception: " + e.getMessage());
+            e.printStackTrace();
+            response.setStatus(500);
+            response.setMessage("An internal error occurred: "+ e.getMessage() + ". Please verify logs for more details");
+            return new ResponseEntity<>(response , HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @GetMapping(value = "/ticket/{ticketNo}", produces = "text/html")
-    public TemplateInstance get(@PathVariable String ticketNo){
+    public TemplateInstance validityTemplate(@PathVariable String ticketNo){
         return validityTemplate
                 .data("ticketNo", ticketNo)
                 .data("nome", "ciccio");

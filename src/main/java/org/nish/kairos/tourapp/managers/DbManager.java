@@ -1,13 +1,10 @@
 package org.nish.kairos.tourapp.managers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.ibm.cloud.cloudant.v1.Cloudant;
 import com.ibm.cloud.cloudant.v1.model.*;
-import org.nish.kairos.tourapp.model.Booking;
-import org.nish.kairos.tourapp.model.Test;
-import org.nish.kairos.tourapp.utils.CloudantConverter;
+import org.nish.kairos.tourapp.utils.Converter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -59,10 +56,10 @@ public class DbManager {
         }
 
         if(document == null) return null;
-        return CloudantConverter.convertToEntity(entityName, document.toString());
+        return Converter.convertToEntity(entityName, document.toString());
     }
 
-    public static List<JsonObject> getCloudantDocFromQuery(String database, Map<String, Object> queryParams){
+    public static Object getCloudantDocFromQuery(String database, Map<String, Object> queryParams, String entityName){
         initializeCloudantConnection();
 
         Map<String, Object> selector = new HashMap<>();
@@ -78,15 +75,15 @@ public class DbManager {
                 cloudant.postFind(findOptions).execute()
                         .getResult();
 
-        return CloudantConverter.convertDocumentStringListToObjectList(response.getDocs().toString(), true);
+        return Converter.convertDocumentStringListToEntityList(response.getDocs().toString(), true, entityName);
     }
 
-    public static List<JsonObject> getAllCloudantDocs(String database) {
+    public static Object getAllCloudantDocs(String database, String entityName) {
         initializeCloudantConnection();
         PostAllDocsOptions postAllDocsOptions = new PostAllDocsOptions.Builder().db(database).includeDocs(true).build();
         AllDocsResult documentList = cloudant.postAllDocs(postAllDocsOptions).execute().getResult();
+        return Converter.convertDocumentStringListToEntityList(documentList.getRows().toString(), false, entityName);
 
-        return CloudantConverter.convertDocumentStringListToObjectList(documentList.getRows().toString(), false);
     }
 
     public static String createOrUpdateCloudantDoc(String database, Object object)  {
@@ -94,7 +91,7 @@ public class DbManager {
         String revision = null;
         JsonObject jsonEntity = null;
         try {
-            jsonEntity = CloudantConverter.convertToJson(object);
+            jsonEntity = Converter.convertToJson(object);
             Document document = createLocalDocumentHelper(jsonEntity);
 
             PostDocumentOptions createDocumentOptions =

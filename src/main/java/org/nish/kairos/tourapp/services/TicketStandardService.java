@@ -1,15 +1,11 @@
 package org.nish.kairos.tourapp.services;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
-import com.google.gson.stream.JsonReader;
 import org.nish.kairos.tourapp.managers.DbManager;
 import org.nish.kairos.tourapp.model.Site;
 import org.nish.kairos.tourapp.model.TicketStandard;
-import org.nish.kairos.tourapp.model.TicketTipology;
-import org.nish.kairos.tourapp.utils.CloudantConverter;
+import org.nish.kairos.tourapp.utils.Converter;
 import org.nish.kairos.tourapp.utils.GeneralHelper;
 import org.nish.kairos.tourapp.utils.TicketGenerator;
 import org.slf4j.Logger;
@@ -17,8 +13,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.awt.image.BufferedImage;
-import java.io.StringReader;
-import java.lang.reflect.Type;
 import java.util.*;
 
 @Component
@@ -67,13 +61,21 @@ public class TicketStandardService {
         logger.info("Verifying ticket with ticketID: " + ticketNo);
         Map<String, Object> queryParam = new HashMap<>();
         queryParam.put("ticketId", ticketNo);
-        List<JsonObject> ticketStandardList = DbManager.getCloudantDocFromQuery(DB_NAME, queryParam);
-        logger.info(ticketStandardList.toString());
-        for(JsonObject jsonObject: ticketStandardList){
-            TicketStandard ticketStandard = new Gson().fromJson(jsonObject, TicketStandard.class);
-            return ticketStandard;
+
+        List<TicketStandard> ticketStandardList = (List<TicketStandard>) DbManager.getCloudantDocFromQuery(DB_NAME, queryParam, ENTITY_NAME);
+        try{
+            return ticketStandardList.get(0);
+        }catch (Exception e){
+            logger.error("Impossible to get first item in ticketStandardList. Error: " + e.getMessage());
+            e.printStackTrace();
+            return null;
         }
-        return null;
+    }
+
+    public List<TicketStandard> getAllTicketsStandard(){
+        logger.info("Retrieving all ticketsStandard");
+        List<TicketStandard> ticketStandardList = (List<TicketStandard>) DbManager.getAllCloudantDocs(DB_NAME, ENTITY_NAME);
+        return ticketStandardList;
     }
 
     public void validateTicketStandard(String ticketNo) throws Exception {

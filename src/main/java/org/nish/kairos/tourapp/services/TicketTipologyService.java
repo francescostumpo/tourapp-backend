@@ -35,7 +35,7 @@ public class TicketTipologyService {
     }
 
     public List<TicketTipology> getAllTicketTipologies(){
-        List<TicketTipology> ticketTipologyList = new Gson().fromJson(DbManager.getAllCloudantDocs(DB_NAME).toString(), List.class);
+        List<TicketTipology> ticketTipologyList = (List<TicketTipology>) DbManager.getAllCloudantDocs(DB_NAME, ENTITY_NAME);
         return ticketTipologyList;
     }
 }

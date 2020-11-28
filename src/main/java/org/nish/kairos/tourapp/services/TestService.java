@@ -13,7 +13,7 @@ public class TestService {
     private static final String DB_NAME = "test";
 
     public List<Test> getAllTestDocuments(){
-        List<Test> testList = (List<Test>)(Object) DbManager.getAllCloudantDocs(DB_NAME);
+        List<Test> testList = (List<Test>) DbManager.getAllCloudantDocs(DB_NAME, ENTITY_NAME);
         return testList;
     }
 
