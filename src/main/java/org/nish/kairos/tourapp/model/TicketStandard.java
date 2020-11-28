@@ -1,6 +1,5 @@
 package org.nish.kairos.tourapp.model;
 
-import java.util.Date;
 import java.util.List;
 
 public class TicketStandard {
@@ -96,19 +95,5 @@ public class TicketStandard {
         this.totaleEuro = totaleEuro;
     }
 
-    @Override
-    public String toString() {
-        return "TicketStandard{" +
-                "_id='" + _id + '\'' +
-                ", _rev='" + _rev + '\'' +
-                ", ticketId='" + ticketId + '\'' +
-                ", tipologiaTicket=" + tipologiaTicket +
-                ", siti=" + siti +
-                ", tourOperator=" + tourOperator +
-                ", nIngressi=" + nIngressi +
-                ", nazione='" + nazione + '\'' +
-                ", dataEmissione=" + dataEmissione +
-                ", totaleEuro=" + totaleEuro +
-                '}';
-    }
+
 }

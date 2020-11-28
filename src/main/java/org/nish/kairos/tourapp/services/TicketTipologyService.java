@@ -1,5 +1,6 @@
 package org.nish.kairos.tourapp.services;
 
+import com.google.gson.Gson;
 import org.nish.kairos.tourapp.managers.DbManager;
 import org.nish.kairos.tourapp.model.TicketTipology;
 import org.slf4j.Logger;
@@ -17,7 +18,8 @@ public class TicketTipologyService {
 
     public boolean createOrUpdateTicketTipology(TicketTipology ticketTipology){
         logger.info("Creating/Updating TicketTipology: " + ticketTipology.getNome());
-        return DbManager.createOrUpdateCloudantDoc(DB_NAME, ticketTipology);
+        if(DbManager.createOrUpdateCloudantDoc(DB_NAME, ticketTipology) != null) return true;
+        return false;
     }
 
     public TicketTipology getTicketTipology(String ticketTipologyId){
@@ -33,7 +35,7 @@ public class TicketTipologyService {
     }
 
     public List<TicketTipology> getAllTicketTipologies(){
-        List<TicketTipology> ticketTipologyList = (List<TicketTipology>) (Object) DbManager.getAllCloudantDocs(DB_NAME);
+        List<TicketTipology> ticketTipologyList = new Gson().fromJson(DbManager.getAllCloudantDocs(DB_NAME).toString(), List.class);
         return ticketTipologyList;
     }
 }

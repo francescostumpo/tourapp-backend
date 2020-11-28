@@ -49,6 +49,11 @@
             <artifactId>rest-assured</artifactId>
             <scope>test</scope>
         </dependency>
+        <!-- Quarkus templating -->
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-resteasy-qute</artifactId>
+        </dependency>
         <!-- Cloudant Dependency (NOSql DB) -->
         <dependency>
             <groupId>com.ibm.cloud</groupId>

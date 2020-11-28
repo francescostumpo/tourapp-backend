@@ -11,6 +11,7 @@ import org.nish.kairos.tourapp.utils.CloudantConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -61,17 +62,36 @@ public class DbManager {
         return CloudantConverter.convertToEntity(entityName, document.toString());
     }
 
-    public static List<Object> getAllCloudantDocs(String database) {
+    public static List<JsonObject> getCloudantDocFromQuery(String database, Map<String, Object> queryParams){
+        initializeCloudantConnection();
+
+        Map<String, Object> selector = new HashMap<>();
+
+        for (Map.Entry<String, Object> entry : queryParams.entrySet()) {
+            Map criteriaToBeVerified = new HashMap<>();
+            criteriaToBeVerified.put("$eq", entry.getValue());
+            selector.put(entry.getKey(), criteriaToBeVerified);
+        }
+
+        PostFindOptions findOptions = new PostFindOptions.Builder().db(database).selector(selector).build();
+        FindResult response =
+                cloudant.postFind(findOptions).execute()
+                        .getResult();
+
+        return CloudantConverter.convertDocumentStringListToObjectList(response.getDocs().toString(), true);
+    }
+
+    public static List<JsonObject> getAllCloudantDocs(String database) {
         initializeCloudantConnection();
         PostAllDocsOptions postAllDocsOptions = new PostAllDocsOptions.Builder().db(database).includeDocs(true).build();
         AllDocsResult documentList = cloudant.postAllDocs(postAllDocsOptions).execute().getResult();
 
-        return CloudantConverter.convertDocumentStringListToObjectList(documentList.getRows().toString());
+        return CloudantConverter.convertDocumentStringListToObjectList(documentList.getRows().toString(), false);
     }
 
-    public static boolean createOrUpdateCloudantDoc(String database, Object object)  {
+    public static String createOrUpdateCloudantDoc(String database, Object object)  {
         initializeCloudantConnection();
-        Boolean createdOrUpdated = false;
+        String revision = null;
         JsonObject jsonEntity = null;
         try {
             jsonEntity = CloudantConverter.convertToJson(object);
@@ -88,13 +108,13 @@ public class DbManager {
                     .getResult();
 
             document.setRev(createDocumentResponse.getRev());
-            createdOrUpdated = true;
+            revision = document.getRev();
         } catch (Exception e) {
             logger.error("Exception: " + e.getMessage());
             e.printStackTrace();
         }
 
-        return createdOrUpdated;
+        return revision;
     }
 
     public static boolean deleteCloudantDoc(String database, String _id, String _rev){

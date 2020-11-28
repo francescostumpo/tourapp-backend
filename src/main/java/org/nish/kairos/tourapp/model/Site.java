@@ -6,6 +6,7 @@ public class Site {
     private String _rev;
     private String nome;
     private String descrizioneBreve;
+    private boolean valid;
 
     public String get_id() {
         return _id;
@@ -39,6 +40,14 @@ public class Site {
         this.descrizioneBreve = descrizioneBreve;
     }
 
+    public boolean isValid() {
+        return valid;
+    }
+
+    public void setValid(boolean valid) {
+        this.valid = valid;
+    }
+
     @Override
     public String toString() {
         return "Site{" +
@@ -46,6 +55,7 @@ public class Site {
                 ", _rev='" + _rev + '\'' +
                 ", nome='" + nome + '\'' +
                 ", descrizioneBreve='" + descrizioneBreve + '\'' +
+                ", validity=" + valid +
                 '}';
     }
 }

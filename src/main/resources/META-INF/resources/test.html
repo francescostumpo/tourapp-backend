@@ -10,28 +10,28 @@
 
 <script>
 
-	function reqListener () {
-	  console.log(this.responseText);
-	}
+    function reqListener () {
+        console.log(this.responseText);
+    }
 
 
-	function print(){
-		var oReq = new XMLHttpRequest();
-		
-		oReq.onload = function(e) {
-		  console.log(this.response)
-		  var file = new Blob([this.response], {type: 'image/png'});
-		  	var url = window.URL || window.webkitURL;
-	        var element = document.createElement('a');
-	        element.setAttribute('href', url.createObjectURL(file));
-	        element.setAttribute('download', "tickets.png");
-	
-	        element.style.display = 'none';
-	        document.body.appendChild(element);
-	        element.click();
-	        document.body.removeChild(element);
-		}
-		let ticket = {
+    function print(){
+        var oReq = new XMLHttpRequest();
+
+        oReq.onload = function(e) {
+            console.log(this.response)
+            var file = new Blob([this.response], {type: 'image/png'});
+            var url = window.URL || window.webkitURL;
+            var element = document.createElement('a');
+            element.setAttribute('href', url.createObjectURL(file));
+            element.setAttribute('download', "tickets.png");
+
+            element.style.display = 'none';
+            document.body.appendChild(element);
+            element.click();
+            document.body.removeChild(element);
+        }
+        let ticket = {
             "tipologiaTicket": {
                 "_id": "420db36e370e0aa7a7c79a263cd725d1",
                 "_rev": "3-cbe6d7d7ea52af1aee86354836ae1fd6",
@@ -62,13 +62,13 @@
         }
 
 
-		oReq.responseType = "arraybuffer";
-		oReq.open("POST", "http://localhost:8080/api/ts/createOrUpdateTicketStandard?mode=single");
+        oReq.responseType = "arraybuffer";
+        oReq.open("POST", "http://localhost:8080/api/ts/createOrUpdateTicketStandard?mode=single");
         oReq.setRequestHeader("Content-Type", "application/json");
         oReq.setRequestHeader("Authorization", "Bearer ey");
-		oReq.send(JSON.stringify(ticket));
-	
-	}
+        oReq.send(JSON.stringify(ticket));
+
+    }
 
     function printMultiple(){
         var oReq = new XMLHttpRequest();

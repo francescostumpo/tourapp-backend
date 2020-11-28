@@ -1,19 +1,28 @@
 package org.nish.kairos.tourapp.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import io.quarkus.qute.Template;
+import io.quarkus.qute.TemplateInstance;
+import io.quarkus.qute.api.CheckedTemplate;
+import io.smallrye.mutiny.Multi;
 import org.nish.kairos.tourapp.managers.DbManager;
 import org.nish.kairos.tourapp.model.Response;
 import org.nish.kairos.tourapp.model.Test;
+import org.nish.kairos.tourapp.model.TicketStandard;
 import org.nish.kairos.tourapp.services.TestService;
 import org.nish.kairos.tourapp.utils.TokenValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletionStage;
+import java.util.function.Consumer;
 
 @RestController
 @RequestMapping("/api")
@@ -21,6 +30,9 @@ public class TestController {
 
     @Inject
     TestService testService;
+
+
+
 
     private static final Logger logger = LoggerFactory.getLogger(TestController.class);
 
@@ -52,7 +64,6 @@ public class TestController {
     }
 
 
-
     @GetMapping("/getAllTestDocs")
     public ResponseEntity<List<Test>> getAllTourOperators() {
 
@@ -60,4 +71,6 @@ public class TestController {
         return new ResponseEntity<>(testList, HttpStatus.OK);
 
     }
+
+
 }

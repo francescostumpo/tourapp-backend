@@ -18,7 +18,8 @@ public class TourOperatorService {
 
     public boolean createOrUpdateTourOperator(TourOperator tourOperator){
         logger.info("Creating/Updating TourOperator: " + tourOperator.getSocieta());
-        return DbManager.createOrUpdateCloudantDoc(DB_NAME, tourOperator);
+        if(DbManager.createOrUpdateCloudantDoc(DB_NAME, tourOperator) != null) return true;
+        return false;
     }
 
     public TourOperator getTourOperator(String tourOperatorId){

@@ -58,13 +58,17 @@ public class CloudantConverter {
     }
 
 
-    public static List<Object> convertDocumentStringListToObjectList(String entitiesListString){
+    public static List<JsonObject> convertDocumentStringListToObjectList(String entitiesListString, boolean manualQuery){
         JsonArray entitiesListJO = new Gson().fromJson(entitiesListString, JsonArray.class);
-        List<Object> objectList = new ArrayList<>();
+        List<JsonObject> objectList = new ArrayList<>();
         for(int i=0; i< entitiesListJO.size(); i++){
-            JsonObject jo = (JsonObject) entitiesListJO.get(i).getAsJsonObject().get("doc");
-            Object object = new Gson().fromJson(jo, Object.class);
-            objectList.add(object);
+            JsonObject jo = null;
+            if(!manualQuery){
+                jo = (JsonObject) entitiesListJO.get(i).getAsJsonObject().get("doc");
+            }else{
+                jo = entitiesListJO.get(i).getAsJsonObject();
+            }
+            objectList.add(jo);
         }
         return objectList;
     }
