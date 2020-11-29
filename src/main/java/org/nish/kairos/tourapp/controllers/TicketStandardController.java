@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import io.quarkus.qute.Template;
 import io.quarkus.qute.TemplateInstance;
 import org.nish.kairos.tourapp.model.Response;
+import org.nish.kairos.tourapp.model.Site;
 import org.nish.kairos.tourapp.model.TicketStandard;
 import org.nish.kairos.tourapp.model.TicketTipology;
 import org.nish.kairos.tourapp.services.TicketStandardService;
@@ -121,9 +122,19 @@ public class TicketStandardController {
 
     @GetMapping(value = "/ticket/{ticketNo}", produces = "text/html")
     public TemplateInstance validityTemplate(@PathVariable String ticketNo){
+
+        TicketStandard ticketStandard = ticketStandardService.getTicketStandard(ticketNo);
+        boolean armed = false;
+        for(Site site: ticketStandard.getSiti()){
+            if(site.isValid()){
+                armed = true;
+            }
+        }
+
         return validityTemplate
-                .data("ticketNo", ticketNo)
-                .data("nome", "ciccio");
+                .data("ticketStandard", ticketStandard)
+                .data("armed", armed);
+
 
     }
 }

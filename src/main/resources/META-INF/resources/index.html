@@ -44,7 +44,13 @@
                 "_rev": "31091283h9r8i3hf230nfo2if0923j",
                 "nome": "castello",
                 "descrizioneBreve": "Castello Murat"
-            }],
+            },
+                {
+                    "_id": "31091283h9r8i3hf230nfo2if0923j",
+                    "_rev": "31091283h9r8i3hf230nfo2if0923j",
+                    "nome": "piedigrotta",
+                    "descrizioneBreve": "Chiesetta Piedigrotta"
+                }],
             "tourOperator": {
                 "_id": "f7ea7197f14a2573e8b30b5d7acd2ec3",
                 "_rev": "1-176fff0a830d903c98ea68e8226d9636",
@@ -63,7 +69,7 @@
 
 
 		oReq.responseType = "arraybuffer";
-		oReq.open("POST", "http://localhost:8080/api/ts/createOrUpdateTicketStandard?mode=single");
+		oReq.open("POST", "http://localhost:8080/api/ts/createOrUpdateTicketStandard?mode=single&site=castello");
         oReq.setRequestHeader("Content-Type", "application/json");
         oReq.setRequestHeader("Authorization", "Bearer ey");
 		oReq.send(JSON.stringify(ticket));
@@ -116,7 +122,7 @@
             "totaleEuro": 2.50
         }
         oReq.responseType = "arraybuffer";
-        oReq.open("POST", "http://localhost:8080/api/ts/createOrUpdateTicketStandard?mode=multiple");
+        oReq.open("POST", "http://localhost:8080/api/ts/createOrUpdateTicketStandard?mode=multiple&site=castello");
         oReq.setRequestHeader("Content-Type", "application/json");
         oReq.setRequestHeader("Authorization", "Bearer ey");
         oReq.send(JSON.stringify(ticket));

@@ -33,7 +33,7 @@ public class TicketGenerator {
         String linkToQr = null;
 
         if(entityName.equals("TicketStandard")) {
-            linkToQr = System.getenv("BACKEND_SERVER_URL") + "/api/ts/verifyTicket/" + ticketNo;
+            linkToQr = System.getenv("BACKEND_SERVER_URL") + "/api/ts/ticket/" + ticketNo;
         }else{
             linkToQr = System.getenv("BACKEND_SERVER_URL") + "/#TO-DO";
         }
