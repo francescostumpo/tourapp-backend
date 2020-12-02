@@ -1,6 +1,6 @@
 package org.nish.kairos.tourapp.model;
 
-public class Booking{
+public class Booking implements Comparable<Booking>{
 
     private String _id;
     private String _rev;
@@ -57,5 +57,10 @@ public class Booking{
                 ", start='" + start + '\'' +
                 ", end='" + end + '\'' +
                 '}';
+    }
+
+    @Override
+    public int compareTo(Booking o) {
+        return getStart().compareTo(o.getStart());
     }
 }
