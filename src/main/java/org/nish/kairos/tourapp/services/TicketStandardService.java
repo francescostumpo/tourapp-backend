@@ -21,31 +21,23 @@ public class TicketStandardService {
     private static final String ENTITY_NAME = "TicketStandard";
     private static final String DB_NAME = "ticketstandard";
     private static final String SINGLE_MODE = "single";
-    private static final String MULTI_MODE = "mode";
+    private static final String MULTI_MODE = "multiple";
 
     private static final Logger logger = LoggerFactory.getLogger(TicketStandardService.class);
 
-    public BufferedImage createOrUpdateTicketStandard(String mode, String site, TicketStandard ticketStandard) throws Exception {
+    public BufferedImage createOrUpdateTicketStandard(String mode, TicketStandard ticketStandard) throws Exception {
         logger.info("Creating/Updating TicketStandard: " + ticketStandard.getTipologiaTicket());
         BufferedImage ticketBufferedImg = null;
 
         Date date = new Date();
         String uniqueTicketId = GeneralHelper.generateUniqueIdForTicket(date);
         if(mode.equals(SINGLE_MODE)){
-            ticketBufferedImg = TicketGenerator.generateMultipleTickets(uniqueTicketId, ticketStandard.getnIngressi(), GeneralHelper.getDateFormatted(date), ticketStandard.getTipologiaTicket().getNome(), ENTITY_NAME);
+            ticketBufferedImg = TicketGenerator.generateMultipleTickets(uniqueTicketId, ticketStandard.getnIngressi(), GeneralHelper.getDateFormatted(date), ticketStandard.getTipologiaTicket().getNome(), ticketStandard.getSiti(), ENTITY_NAME);
         }else{
-            ticketBufferedImg = TicketGenerator.generateTicket(uniqueTicketId, ticketStandard.getnIngressi(), GeneralHelper.getDateFormatted(date), ticketStandard.getTipologiaTicket().getNome(), ENTITY_NAME);
+            ticketBufferedImg = TicketGenerator.generateTicket(uniqueTicketId, ticketStandard.getnIngressi(), GeneralHelper.getDateFormatted(date), ticketStandard.getTipologiaTicket().getNome(), ticketStandard.getSiti(), ENTITY_NAME);
         }
         ticketStandard.setTicketId(GeneralHelper.generateUniqueIdForTicket(date));
         ticketStandard.setDataEmissione(GeneralHelper.getDateFormatted(date));
-
-        for(Site si: ticketStandard.getSiti()){
-            if(si.getNome().equals(site)){
-                si.setValid(false);
-            }else{
-                si.setValid(true);
-            }
-        }
 
         ticketStandard.setTotaleEuro(ticketStandard.getnIngressi()*ticketStandard.getTipologiaTicket().getPrezzo());
 
@@ -57,19 +49,13 @@ public class TicketStandardService {
         }
     }
 
-    public TicketStandard getTicketStandard(String ticketNo){
+    public List<TicketStandard> getTicketStandard(String ticketNo){
         logger.info("Verifying ticket with ticketID: " + ticketNo);
         Map<String, Object> queryParam = new HashMap<>();
         queryParam.put("ticketId", ticketNo);
 
         List<TicketStandard> ticketStandardList = (List<TicketStandard>) DbManager.getCloudantDocFromQuery(DB_NAME, queryParam, ENTITY_NAME);
-        try{
-            return ticketStandardList.get(0);
-        }catch (Exception e){
-            logger.error("Impossible to get first item in ticketStandardList. Error: " + e.getMessage());
-            e.printStackTrace();
-            return null;
-        }
+        return ticketStandardList;
     }
 
     public List<TicketStandard> getAllTicketsStandard(){
@@ -80,7 +66,13 @@ public class TicketStandardService {
 
     public void validateTicketStandard(String ticketNo) throws Exception {
         try{
-            TicketStandard ticketStandard = getTicketStandard(ticketNo);
+            List<TicketStandard> ticketStandardList = getTicketStandard(ticketNo);
+            TicketStandard ticketStandard = null;
+            if(ticketStandardList.size() > 0){
+                ticketStandard = ticketStandardList.get(0);
+            }else{
+                return;
+            }
             String revision = null;
             for(Site site: ticketStandard.getSiti()){
                 if(site.isValid()){

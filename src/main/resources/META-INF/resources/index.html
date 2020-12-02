@@ -1,11 +1,50 @@
 <html>
-
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link href="https://vjs.zencdn.net/7.10.2/video-js.css" rel="stylesheet" />
+    <script src="https://vjs.zencdn.net/7.10.2/video.js"></script>
+</head>
 <body>
-<h1>Index.html</h1>
+<div class="container-fluid mt-3">
+    <h1>Index.html</h1>
+    <div class="card">
+        <div class="card-body">
+            <button class="btn btn-outline-warning" onClick="print()">Print</button>
+            <button class="btn btn-outline-warning" onclick="printMultiple()">PrintMultiple</button>
+            <button class="btn btn-outline-warning" onclick="printFattura()">PrintFattura</button>
+        </div>
+    </div>
 
+<hr>
+<!--
+    <div class="card">
+        <div class="card-body">
+            <p class="lead">Sample Video</p>
+            <video
+                    id="my-video"
+                    class="video-js"
+                    controls
+                    preload="auto"
+                    width="640"
+                    height="264"
+                    data-setup="{}"
+            >
+                <source src="https://s3.eu-de.cloud-object-storage.appdomain.cloud/tourapp-videos/sample-mp4-file.mp4" type="video/mp4" />
+                <p class="vjs-no-js">
+                    To view this video please enable JavaScript, and consider upgrading to a
+                    web browser that
+                    <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+                </p>
+            </video>
 
-<button onClick="print()">Print</button>
-<button onclick="printMultiple()">PrintMultiple</button>
+            <p class="lead mt-5">Sample Audio</p>
+            <audio controls>
+                <source src="https://s3.eu-de.cloud-object-storage.appdomain.cloud/tourapp-videos/file_example_MP3_700KB.mp3" type="audio/mp3">
+            </audio>
+        </div>
+    </div>-->
+</div>
+
 </body>
 
 <script>
@@ -62,7 +101,7 @@
                 "indirizzo": "corso Sempione 5",
                 "cap": 21020
             },
-            "nIngressi": 6,
+            "nIngressi": 1,
             "nazione": "GER",
             "totaleEuro": 2.50
         }
@@ -105,6 +144,12 @@
                 "_rev": "31091283h9r8i3hf230nfo2if0923j",
                 "nome": "castello",
                 "descrizioneBreve": "Castello Murat"
+            },
+            {
+                "_id": "31091283h9r8i3hf230nfo2if0923j",
+                "_rev": "31091283h9r8i3hf230nfo2if0923j",
+                "nome": "piedigrotta",
+                "descrizioneBreve": "Chiesetta Piedigrotta"
             }],
             "tourOperator": {
                 "_id": "f7ea7197f14a2573e8b30b5d7acd2ec3",
@@ -117,7 +162,7 @@
                 "indirizzo": "corso Sempione 5",
                 "cap": 21020
             },
-            "nIngressi": 6,
+            "nIngressi": 7,
             "nazione": "GER",
             "totaleEuro": 2.50
         }
@@ -127,6 +172,65 @@
         oReq.setRequestHeader("Authorization", "Bearer ey");
         oReq.send(JSON.stringify(ticket));
 
+    }
+
+    function printFattura(){
+        var oReq = new XMLHttpRequest();
+
+        oReq.onload = function(e) {
+            console.log(this.response)
+            var file = new Blob([this.response], {type: 'application/pdf'});
+            var url = window.URL || window.webkitURL;
+            var element = document.createElement('a');
+            element.setAttribute('href', url.createObjectURL(file));
+            element.setAttribute('download', "test.pdf");
+
+            element.style.display = 'none';
+            document.body.appendChild(element);
+            element.click();
+            document.body.removeChild(element);
+        }
+        let ticket = {
+            "tipologiaTicket": {
+                "_id": "420db36e370e0aa7a7c79a263cd725d1",
+                "_rev": "3-cbe6d7d7ea52af1aee86354836ae1fd6",
+                "nome": "Ticket Standard",
+                "categoria": "Intero - Sito singolo",
+                "prezzo": 2
+            },
+            "siti": [{
+                "_id": "31091283h9r8i3hf230nfo2if0923j",
+                "_rev": "31091283h9r8i3hf230nfo2if0923j",
+                "nome": "castello",
+                "descrizioneBreve": "Castello Murat"
+            },
+                {
+                    "_id": "31091283h9r8i3hf230nfo2if0923j",
+                    "_rev": "31091283h9r8i3hf230nfo2if0923j",
+                    "nome": "piedigrotta",
+                    "descrizioneBreve": "Chiesetta Piedigrotta"
+                }],
+            "tourOperator": {
+                "_id": "f7ea7197f14a2573e8b30b5d7acd2ec3",
+                "_rev": "1-176fff0a830d903c98ea68e8226d9636",
+                "nome": "Gianni Esposito",
+                "citta": "Milano",
+                "telefono": "+39 023456789",
+                "societa": "AlpiTour S.p.A",
+                "provincia": "Milano",
+                "indirizzo": "corso Sempione 5",
+                "cap": 21020
+            },
+            "nIngressi": 7,
+            "nazione": "GER",
+            "totaleEuro": 2.50
+        }
+
+        oReq.responseType = "arraybuffer";
+        oReq.open("POST", "http://localhost:8080/api/ts/generateFattura");
+        oReq.setRequestHeader("Content-Type", "application/json");
+        oReq.setRequestHeader("Authorization", "Bearer ey");
+        oReq.send(JSON.stringify(ticket));
     }
 </script>
 </html>

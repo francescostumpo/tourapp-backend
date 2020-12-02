@@ -97,7 +97,7 @@ public class TicketTipologyController {
         }
     }
 
-    @DeleteMapping("/deleteTicketTipology")
+    @PostMapping("/deleteTicketTipology")
     public ResponseEntity<Object> deleteTicketTipology(@RequestHeader("Authorization") String authorization, @RequestBody TicketTipology ticketTipology){
 
         Response response = new Response();

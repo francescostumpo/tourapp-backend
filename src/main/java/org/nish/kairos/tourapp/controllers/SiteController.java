@@ -97,8 +97,8 @@ public class SiteController {
         }
     }
 
-    @DeleteMapping("/deleteSite")
-    public ResponseEntity<Object> deleteTourOperator(@RequestHeader("Authorization") String authorization, @RequestBody Site site){
+    @PostMapping("/deleteSite")
+    public ResponseEntity<Object> deleteSite(@RequestHeader("Authorization") String authorization, @RequestBody Site site){
 
         Response response = new Response();
 

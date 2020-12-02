@@ -98,7 +98,7 @@ public class TourOperatorController {
         }
     }
 
-    @DeleteMapping("/deleteTourOperator")
+    @PostMapping("/deleteTourOperator")
     public ResponseEntity<Object> deleteTourOperator(@RequestHeader("Authorization") String authorization, @RequestBody TourOperator tourOperator){
 
         Response response = new Response();

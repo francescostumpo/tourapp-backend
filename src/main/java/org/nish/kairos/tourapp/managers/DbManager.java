@@ -25,7 +25,7 @@ public class DbManager {
         }else{
             try{
                 // Checking connection to cloudant is active
-                cloudant.getServerInformation();
+                cloudant.getServerInformation().execute().getResult();
             }catch(Exception e){
                 cloudant = null;
                 initializeCloudantConnection();

@@ -8,6 +8,8 @@ import org.nish.kairos.tourapp.model.Site;
 import org.nish.kairos.tourapp.model.TicketStandard;
 import org.nish.kairos.tourapp.model.TicketTipology;
 import org.nish.kairos.tourapp.services.TicketStandardService;
+import org.nish.kairos.tourapp.utils.InvoiceGenerator;
+import org.nish.kairos.tourapp.utils.TicketGenerator;
 import org.nish.kairos.tourapp.utils.TokenValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,14 +38,14 @@ public class TicketStandardController {
     TicketStandardService ticketStandardService;
 
     @PostMapping(value = "/createOrUpdateTicketStandard", produces = MediaType.IMAGE_PNG_VALUE)
-    public ResponseEntity<Object> createOrUpdateTicket(@RequestHeader("Authorization") String authorization, @RequestParam String mode, @RequestParam String site, @RequestBody TicketStandard ticketStandard){
+    public ResponseEntity<Object> createOrUpdateTicket(@RequestHeader("Authorization") String authorization, @RequestParam String mode, @RequestBody TicketStandard ticketStandard){
 
         Response response = new Response();
 
         if(!TokenValidator.validate(authorization)) return new ResponseEntity<>(TokenValidator.generateUnauthResponse(response), HttpStatus.UNAUTHORIZED);
 
         try{
-            BufferedImage tickets = ticketStandardService.createOrUpdateTicketStandard(mode, site, ticketStandard);
+            BufferedImage tickets = ticketStandardService.createOrUpdateTicketStandard(mode, ticketStandard);
             ByteArrayOutputStream os = new ByteArrayOutputStream();
             ImageIO.write(tickets, "png", os);                          // Passing: ​(RenderedImage im, String formatName, OutputStream output)
             InputStream is = new ByteArrayInputStream(os.toByteArray());
@@ -65,11 +67,13 @@ public class TicketStandardController {
         if(!TokenValidator.validate(authorization)) return new ResponseEntity<>(TokenValidator.generateUnauthResponse(response), HttpStatus.UNAUTHORIZED);
 
         try{
-            TicketStandard ticketStandard = ticketStandardService.getTicketStandard(ticketNo);
-            if(ticketStandard != null){
+            List<TicketStandard> ticketStandardList = ticketStandardService.getTicketStandard(ticketNo);
+            TicketStandard ticketStandard = null;
+            if(ticketStandardList.size() > 0){
+                ticketStandard = ticketStandardList.get(0);
                 return new ResponseEntity<>(ticketStandard, HttpStatus.OK);
             }else{
-                return new ResponseEntity<>(new JsonArray(), HttpStatus.OK);
+                return new ResponseEntity<>(ticketStandardList, HttpStatus.OK);
             }
         }catch (Exception e){
             logger.error("Exception: " + e.getMessage());
@@ -120,10 +124,30 @@ public class TicketStandardController {
         }
     }
 
+    @PostMapping("/generateFattura")
+    public ResponseEntity<Object> generateFattura(@RequestBody TicketStandard ticketStandard){
+        Response response = new Response();
+        InputStream is = null;
+        try{
+            is = InvoiceGenerator.generateFattura(ticketStandard);
+            return new ResponseEntity<>(is, HttpStatus.OK);
+        }catch (Exception e){
+            logger.error("Exception: " + e.getMessage());
+            e.printStackTrace();
+            response.setStatus(500);
+            response.setMessage("An internal error occurred: "+ e.getMessage() + ". Please verify logs for more details");
+            return new ResponseEntity<>(response , HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @GetMapping(value = "/ticket/{ticketNo}", produces = "text/html")
     public TemplateInstance validityTemplate(@PathVariable String ticketNo){
 
-        TicketStandard ticketStandard = ticketStandardService.getTicketStandard(ticketNo);
+        List<TicketStandard> ticketStandardList = ticketStandardService.getTicketStandard(ticketNo);
+        TicketStandard ticketStandard = null;
+        if(ticketStandardList.size()>0){
+            ticketStandard = ticketStandardList.get(0);
+        }
         boolean armed = false;
         for(Site site: ticketStandard.getSiti()){
             if(site.isValid()){
