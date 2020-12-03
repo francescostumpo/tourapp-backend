@@ -1,8 +1,11 @@
 package org.nish.kairos.tourapp.model;
 
+import org.nish.kairos.tourapp.utils.GeneralHelper;
+
+import java.text.ParseException;
 import java.util.List;
 
-public class TicketStandard {
+public class TicketStandard implements Comparable<TicketStandard>{
 
     private String _id;
     private String _rev;
@@ -96,4 +99,13 @@ public class TicketStandard {
     }
 
 
+    @Override
+    public int compareTo(TicketStandard o) {
+        try {
+            return GeneralHelper.formatStringDateToDate(getDataEmissione()).compareTo(GeneralHelper.formatStringDateToDate(o.getDataEmissione()));
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return -1;
+        }
+    }
 }
