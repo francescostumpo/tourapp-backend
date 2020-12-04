@@ -30,7 +30,7 @@ public class TicketGenerator {
 
     public static BufferedImage generateTicket(String ticketNo, int nIngressi, String dataEmissione, String ticketType, List<Site> siteList, String entityName) throws Exception {
 
-        BufferedImage ticketBf = new BufferedImage(500, 200, BufferedImage.TYPE_INT_ARGB);
+        BufferedImage ticketBf = new BufferedImage(500, 200, BufferedImage.TYPE_INT_ARGB); // 350 x 250
         Graphics2D g2d = ticketBf.createGraphics();
         String linkToQr = null;
 

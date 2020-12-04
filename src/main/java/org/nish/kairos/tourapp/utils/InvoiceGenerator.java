@@ -51,10 +51,13 @@ public class InvoiceGenerator {
             p2.setAlignment(Element.ALIGN_RIGHT);
             Paragraph p3 = new Paragraph(tourOperator.getProvincia() + " " + tourOperator.getTelefono(), corpoFont);
             p3.setAlignment(Element.ALIGN_RIGHT);
+            Paragraph p4 = new Paragraph("P. IVA " + tourOperator.getPiva(), corpoFont);
+            p4.setAlignment(Element.ALIGN_RIGHT);
             div.addElement(p0);
             div.addElement(p1);
             div.addElement(p2);
             div.addElement(p3);
+            div.addElement(p4);
         }
 
 

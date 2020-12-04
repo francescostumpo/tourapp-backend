@@ -16,6 +16,7 @@ public class TicketStandard implements Comparable<TicketStandard>{
     private int nIngressi;
     private String nazione;
     private String dataEmissione;
+    private String luogoEmissione;
     private double totaleEuro;
 
     public String get_id() {
@@ -88,6 +89,14 @@ public class TicketStandard implements Comparable<TicketStandard>{
 
     public void setDataEmissione(String dataEmissione) {
         this.dataEmissione = dataEmissione;
+    }
+
+    public String getLuogoEmissione() {
+        return luogoEmissione;
+    }
+
+    public void setLuogoEmissione(String luogoEmissione) {
+        this.luogoEmissione = luogoEmissione;
     }
 
     public double getTotaleEuro() {

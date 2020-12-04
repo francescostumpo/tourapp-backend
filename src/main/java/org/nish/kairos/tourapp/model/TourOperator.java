@@ -11,6 +11,7 @@ public class TourOperator {
     private String provincia;
     private String indirizzo;
     private int cap;
+    private String piva;
 
     public String get_id() {
         return _id;
@@ -84,6 +85,14 @@ public class TourOperator {
         this.cap = cap;
     }
 
+    public String getPiva() {
+        return piva;
+    }
+
+    public void setPiva(String piva) {
+        this.piva = piva;
+    }
+
     @Override
     public String toString() {
         return "TourOperator{" +
@@ -96,6 +105,8 @@ public class TourOperator {
                 ", provincia='" + provincia + '\'' +
                 ", indirizzo='" + indirizzo + '\'' +
                 ", cap=" + cap +
+                ", piva='" + piva + '\'' +
                 '}';
     }
+
 }

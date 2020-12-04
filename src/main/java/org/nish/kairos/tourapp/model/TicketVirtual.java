@@ -12,6 +12,7 @@ public class TicketVirtual {
     private List<Site> siti;
     private TourOperator tourOperator;
     private int nIngressi;
+    private String luogoEmissione;
     private Date dataEmissione;
     private double totaleEuro;
     private String randomPassword;
@@ -65,6 +66,14 @@ public class TicketVirtual {
         this.tourOperator = tourOperator;
     }
 
+    public String getLuogoEmissione() {
+        return luogoEmissione;
+    }
+
+    public void setLuogoEmissione(String luogoEmissione) {
+        this.luogoEmissione = luogoEmissione;
+    }
+
     public int getnIngressi() {
         return nIngressi;
     }
@@ -115,6 +124,7 @@ public class TicketVirtual {
                 ", siti=" + siti +
                 ", tourOperator=" + tourOperator +
                 ", nIngressi=" + nIngressi +
+                ", luogoEmissione='" + luogoEmissione + '\'' +
                 ", dataEmissione=" + dataEmissione +
                 ", totaleEuro=" + totaleEuro +
                 ", randomPassword='" + randomPassword + '\'' +
