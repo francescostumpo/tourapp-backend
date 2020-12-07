@@ -28,17 +28,12 @@ public class TicketGenerator {
         return MatrixToImageWriter.toBufferedImage(bitMatrix);
     }
 
-    public static BufferedImage generateTicket(String ticketNo, int nIngressi, String dataEmissione, String ticketType, List<Site> siteList, String entityName) throws Exception {
+    public static BufferedImage generateTicketStandard(String ticketNo, int nIngressi, String dataEmissione, String ticketType, List<Site> siteList, String entityName) throws Exception {
 
         BufferedImage ticketBf = new BufferedImage(500, 200, BufferedImage.TYPE_INT_ARGB); // 350 x 250
         Graphics2D g2d = ticketBf.createGraphics();
-        String linkToQr = null;
+        String linkToQr = System.getenv("BACKEND_SERVER_URL") + "/api/ts/ticket/" + ticketNo;
 
-        if(entityName.equals("TicketStandard")) {
-            linkToQr = System.getenv("BACKEND_SERVER_URL") + "/api/ts/ticket/" + ticketNo;
-        }else{
-            linkToQr = System.getenv("BACKEND_SERVER_URL") + "/#TO-DO";
-        }
         BufferedImage qrBf = generateQRCodeImage(linkToQr);
 
         // Set Background
@@ -80,13 +75,13 @@ public class TicketGenerator {
         return ticketBf;
     }
 
-    public static BufferedImage generateMultipleTickets(String ticketNo, int nIngressi, String dataEmissione, String ticketType, List<Site> siteList, String entityName) throws Exception {
+    public static BufferedImage generateMultipleTicketsStandard(String ticketNo, int nIngressi, String dataEmissione, String ticketType, List<Site> siteList, String entityName) throws Exception {
         logger.info("Creating tickets - started.");
         BufferedImage bfMultipleTickets = new BufferedImage(500* nIngressi, 200, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2d = bfMultipleTickets.createGraphics();
         int count = 0;
         for(int i=0; i< nIngressi; i++) {
-            BufferedImage singleTicket = generateTicket(ticketNo, 1, dataEmissione, ticketType, siteList, entityName);
+            BufferedImage singleTicket = generateTicketStandard(ticketNo, 1, dataEmissione, ticketType, siteList, entityName);
             g2d.drawImage(singleTicket, 500*count, 0, null);
             g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
             count++;
@@ -97,4 +92,46 @@ public class TicketGenerator {
 
     }
 
+    public static BufferedImage generateTicketVirtual(String ticketNo, String randomPassword, String ticketType, String sitoVirtualTour) throws Exception {
+
+        BufferedImage ticketBf = new BufferedImage(500, 200, BufferedImage.TYPE_INT_ARGB); // 350 x 250
+        Graphics2D g2d = ticketBf.createGraphics();
+        String linkToQr = System.getenv("FRONTEND_SERVER_URL") + "/tourApp/virtualTour" + ticketNo;
+
+        BufferedImage qrBf = generateQRCodeImage(linkToQr);
+
+        // Set Background
+        g2d.setColor(Color.white);
+        g2d.fillRect(0, 0, 500, 200);
+        g2d.setColor(Color.orange);
+        g2d.drawRect(1, 1, 497, 197);
+
+
+        g2d.drawImage(qrBf, 10, 8, null);
+        g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+        g2d.setColor(Color.BLACK);
+        g2d.setFont(new Font("Monospaced", Font.BOLD, 19));
+        g2d.drawString("Ticket # " + ticketNo, 210, 35);
+
+        g2d.setFont(new Font("Monospaced", Font.BOLD, 16));
+        g2d.drawString(ticketType, 210, 65);
+        g2d.setFont(new Font("Monospaced", Font.PLAIN, 16));
+        g2d.drawString("Ingressi # " + 1, 210, 85);
+
+        g2d.setFont(new Font("Monospaced", Font.PLAIN, 14));
+        g2d.drawString(sitoVirtualTour,  210, 115);
+        g2d.setFont(new Font("Monospaced", Font.PLAIN, 12));
+        g2d.drawString("Password " + randomPassword,  210, 135);
+
+        InputStream isComune = TicketGenerator.class.getClassLoader().getResourceAsStream("/img/logoComune.jpg");
+        BufferedImage logoComune = ImageIO.read(isComune);
+        InputStream is = TicketGenerator.class.getClassLoader().getResourceAsStream("/img/logo-kairos.png");
+        BufferedImage logoImage = ImageIO.read(is);
+        g2d.scale(0.50, 0.50);
+        g2d.drawImage(logoComune, 635, 332, null);
+        g2d.drawImage(logoImage, 690, 325, null);
+        g2d.dispose();
+
+        return ticketBf;
+    }
 }

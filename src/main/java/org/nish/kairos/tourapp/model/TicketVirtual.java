@@ -8,15 +8,17 @@ public class TicketVirtual {
     private String _id;
     private String _rev;
     private String ticketId;
-    private TicketTipology tipologiaTicket;
-    private List<Site> siti;
-    private TourOperator tourOperator;
-    private int nIngressi;
     private String luogoEmissione;
-    private Date dataEmissione;
+    private String luogoAttivazione;
+    private String dataAttivazione;
+    private TicketTipology ticketTipology;
+    private TourOperator tourOperator;
     private double totaleEuro;
     private String randomPassword;
-    private String clientIp;
+    private boolean accessoEffettuato;
+    private boolean attivato;
+    private String cookieValue;
+    private String nazione;
 
     public String get_id() {
         return _id;
@@ -42,30 +44,6 @@ public class TicketVirtual {
         this.ticketId = ticketId;
     }
 
-    public TicketTipology getTipologiaTicket() {
-        return tipologiaTicket;
-    }
-
-    public void setTipologiaTicket(TicketTipology tipologiaTicket) {
-        this.tipologiaTicket = tipologiaTicket;
-    }
-
-    public List<Site> getSiti() {
-        return siti;
-    }
-
-    public void setSiti(List<Site> siti) {
-        this.siti = siti;
-    }
-
-    public TourOperator getTourOperator() {
-        return tourOperator;
-    }
-
-    public void setTourOperator(TourOperator tourOperator) {
-        this.tourOperator = tourOperator;
-    }
-
     public String getLuogoEmissione() {
         return luogoEmissione;
     }
@@ -74,20 +52,36 @@ public class TicketVirtual {
         this.luogoEmissione = luogoEmissione;
     }
 
-    public int getnIngressi() {
-        return nIngressi;
+    public String getLuogoAttivazione() {
+        return luogoAttivazione;
     }
 
-    public void setnIngressi(int nIngressi) {
-        this.nIngressi = nIngressi;
+    public void setLuogoAttivazione(String luogoAttivazione) {
+        this.luogoAttivazione = luogoAttivazione;
     }
 
-    public Date getDataEmissione() {
-        return dataEmissione;
+    public String getDataAttivazione() {
+        return dataAttivazione;
     }
 
-    public void setDataEmissione(Date dataEmissione) {
-        this.dataEmissione = dataEmissione;
+    public void setDataAttivazione(String dataAttivazione) {
+        this.dataAttivazione = dataAttivazione;
+    }
+
+    public TicketTipology getTicketTipology() {
+        return ticketTipology;
+    }
+
+    public void setTicketTipology(TicketTipology ticketTipology) {
+        this.ticketTipology = ticketTipology;
+    }
+
+    public TourOperator getTourOperator() {
+        return tourOperator;
+    }
+
+    public void setTourOperator(TourOperator tourOperator) {
+        this.tourOperator = tourOperator;
     }
 
     public double getTotaleEuro() {
@@ -106,12 +100,36 @@ public class TicketVirtual {
         this.randomPassword = randomPassword;
     }
 
-    public String getClientIp() {
-        return clientIp;
+    public boolean isAccessoEffettuato() {
+        return accessoEffettuato;
     }
 
-    public void setClientIp(String clientIp) {
-        this.clientIp = clientIp;
+    public void setAccessoEffettuato(boolean accessoEffettuato) {
+        this.accessoEffettuato = accessoEffettuato;
+    }
+
+    public boolean isAttivato() {
+        return attivato;
+    }
+
+    public void setAttivato(boolean attivato) {
+        this.attivato = attivato;
+    }
+
+    public String getCookieValue() {
+        return cookieValue;
+    }
+
+    public void setCookieValue(String cookieValue) {
+        this.cookieValue = cookieValue;
+    }
+
+    public String getNazione() {
+        return nazione;
+    }
+
+    public void setNazione(String nazione) {
+        this.nazione = nazione;
     }
 
     @Override
@@ -120,15 +138,17 @@ public class TicketVirtual {
                 "_id='" + _id + '\'' +
                 ", _rev='" + _rev + '\'' +
                 ", ticketId='" + ticketId + '\'' +
-                ", tipologiaTicket=" + tipologiaTicket +
-                ", siti=" + siti +
-                ", tourOperator=" + tourOperator +
-                ", nIngressi=" + nIngressi +
                 ", luogoEmissione='" + luogoEmissione + '\'' +
-                ", dataEmissione=" + dataEmissione +
+                ", luogoAttivazione='" + luogoAttivazione + '\'' +
+                ", dataAttivazione='" + dataAttivazione + '\'' +
+                ", ticketTipology=" + ticketTipology +
+                ", tourOperator=" + tourOperator +
                 ", totaleEuro=" + totaleEuro +
                 ", randomPassword='" + randomPassword + '\'' +
-                ", clientIp='" + clientIp + '\'' +
+                ", accessoEffettuato=" + accessoEffettuato +
+                ", attivato=" + attivato +
+                ", cookieValue='" + cookieValue + '\'' +
+                ", nazione='" + nazione + '\'' +
                 '}';
     }
 }

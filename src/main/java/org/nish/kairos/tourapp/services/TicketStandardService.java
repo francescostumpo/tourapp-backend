@@ -32,9 +32,9 @@ public class TicketStandardService {
         Date date = new Date();
         String uniqueTicketId = GeneralHelper.generateUniqueIdForTicket(date);
         if(mode.equals(SINGLE_MODE)){
-            ticketBufferedImg = TicketGenerator.generateMultipleTickets(uniqueTicketId, ticketStandard.getnIngressi(), GeneralHelper.getDateFormatted(date), ticketStandard.getTipologiaTicket().getNome(), ticketStandard.getSiti(), ENTITY_NAME);
+            ticketBufferedImg = TicketGenerator.generateMultipleTicketsStandard(uniqueTicketId, ticketStandard.getnIngressi(), GeneralHelper.getDateFormatted(date), ticketStandard.getTipologiaTicket().getNome(), ticketStandard.getSiti(), ENTITY_NAME);
         }else{
-            ticketBufferedImg = TicketGenerator.generateTicket(uniqueTicketId, ticketStandard.getnIngressi(), GeneralHelper.getDateFormatted(date), ticketStandard.getTipologiaTicket().getNome(), ticketStandard.getSiti(), ENTITY_NAME);
+            ticketBufferedImg = TicketGenerator.generateTicketStandard(uniqueTicketId, ticketStandard.getnIngressi(), GeneralHelper.getDateFormatted(date), ticketStandard.getTipologiaTicket().getNome(), ticketStandard.getSiti(), ENTITY_NAME);
         }
         ticketStandard.setTicketId(GeneralHelper.generateUniqueIdForTicket(date));
         ticketStandard.setDataEmissione(GeneralHelper.getDateFormatted(date));
