@@ -30,10 +30,10 @@ public class InvoiceGenerator {
         Font headerTableFont = new Font(Font.FontFamily.COURIER, 14);
         Font corpoFont = new Font(Font.FontFamily.COURIER, 12);
         document.open();
-        InputStream logoKairos = TicketGenerator.class.getClassLoader().getResourceAsStream("/img/logo-kairos.png");
+        //InputStream logoKairos = InvoiceGenerator.class.getClassLoader().getResourceAsStream("logo-kairos.png");
 
-        Image image = Image.getInstance(ByteStreams.toByteArray(logoKairos));
-        image.scalePercent(50);
+        //Image image = Image.getInstance(ByteStreams.toByteArray(logoKairos));
+        //image.scalePercent(50);
         Paragraph intestazione = new Paragraph();
         intestazione.add(new Paragraph("Via Nazionale snc C.da Mazzotta", subIntestazioneFont));
         intestazione.add(new Paragraph("Pizzo (VV) - 89812", subIntestazioneFont));
@@ -158,7 +158,7 @@ public class InvoiceGenerator {
 
         Paragraph banca = new Paragraph("Modalità di pagamento: bonifico bancario Credem Spa Filiale di Pizzo (VV) IBAN IT12F0303242690010000002176", subIntestazioneFont);
 
-        document.add(image);
+        //document.add(image);
         document.add(intestazione);
         document.add(new Paragraph(" "));
 

@@ -1,0 +1,19 @@
+---
+applications:
+  - instances: 1
+    timeout: 240
+    name: tourapp-backend
+    buildpack: https://github.com/cloudfoundry/java-buildpack.git#v4.16
+    path: ./target/tourapp-backend-1.0.0-runner.jar
+    disk_quota: 512M
+    memory: 220M
+    domain: eu-gb.mybluemix.net
+    host: tourapp-kairos-backend
+    env:
+      BACKEND_SERVER_URL: 'https://tourapp-kairos-backend.eu-gb.mybluemix.net'
+      TOURAPPDB_INSTANCENAME: 'TOURAPPDB'
+      TOURAPPDB_APIKEY: 'GdBTqAtRhx_8iR0QHD7eNll-dhtykMwPb0CDc7IfJe2p'
+      TOURAPPDB_URL: 'https://b41e0ab3-7001-4192-b408-c35cdee75e8c-bluemix.cloudantnosqldb.appdomain.cloud'
+      VERIFICATION_CODE: '1G4lk9!'
+      JBP_CONFIG_OPEN_JDK_JRE: '{ jre: { version: 11.+}}'
+      JAVA_OPTS: '-Xss1M -XX:ReservedCodeCacheSize=20M -Xms64m -Xmx220m -XX:MetaspaceSize=32m -XX:MaxMetaspaceSize=220m'
