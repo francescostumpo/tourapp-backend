@@ -87,4 +87,8 @@ public class TicketStandardService {
             throw new Exception();
         }
     }
+
+    public BufferedImage generateTicketMatrix(TicketStandard ticketStandard) throws Exception {
+        return TicketGenerator.generateTicketStandard(ticketStandard.getTicketId(), ticketStandard.getnIngressi(), ticketStandard.getDataEmissione(), ticketStandard.getTipologiaTicket().getNome(), ticketStandard.getSiti(), ENTITY_NAME);
+    }
 }

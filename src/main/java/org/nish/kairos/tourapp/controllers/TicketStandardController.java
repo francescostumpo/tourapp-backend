@@ -140,6 +140,28 @@ public class TicketStandardController {
         }
     }
 
+    @PostMapping(value = "/generateTicketMatrix", produces = MediaType.IMAGE_PNG_VALUE)
+    public ResponseEntity<Object> generateTicketMatrix(@RequestHeader("Authorization") String authorization, @RequestBody TicketStandard ticketStandard){
+        Response response = new Response();
+
+        if(!TokenValidator.validate(authorization)) return new ResponseEntity<>(TokenValidator.generateUnauthResponse(response), HttpStatus.UNAUTHORIZED);
+
+        try{
+            BufferedImage tickets = ticketStandardService.generateTicketMatrix(ticketStandard);
+            ByteArrayOutputStream os = new ByteArrayOutputStream();
+            ImageIO.write(tickets, "png", os);                          // Passing: ​(RenderedImage im, String formatName, OutputStream output)
+            InputStream is = new ByteArrayInputStream(os.toByteArray());
+            return new ResponseEntity<>(is, HttpStatus.OK);
+
+        }catch (Exception e){
+            logger.error("Exception: " + e.getMessage());
+            e.printStackTrace();
+            response.setStatus(500);
+            response.setMessage("An internal error occurred: "+ e.getMessage() + ". Please verify logs for more details");
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @GetMapping(value = "/ticket/{ticketNo}", produces = "text/html")
     public TemplateInstance validityTemplate(@PathVariable String ticketNo){
 

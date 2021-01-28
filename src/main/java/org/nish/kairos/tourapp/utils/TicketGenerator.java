@@ -123,9 +123,9 @@ public class TicketGenerator {
         g2d.setFont(new Font("Monospaced", Font.PLAIN, 12));
         g2d.drawString("Password " + randomPassword,  210, 135);
 
-        InputStream isComune = TicketGenerator.class.getClassLoader().getResourceAsStream("/img/logoComune.jpg");
+        InputStream isComune = TicketGenerator.class.getClassLoader().getResourceAsStream("logoComune.jpg");
         BufferedImage logoComune = ImageIO.read(isComune);
-        InputStream is = TicketGenerator.class.getClassLoader().getResourceAsStream("/img/logo-kairos.png");
+        InputStream is = TicketGenerator.class.getClassLoader().getResourceAsStream("logo-kairos.png");
         BufferedImage logoImage = ImageIO.read(is);
         g2d.scale(0.50, 0.50);
         g2d.drawImage(logoComune, 635, 332, null);
